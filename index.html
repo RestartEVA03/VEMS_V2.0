@@ -1,16 +1,118 @@
 <!DOCTYPE html>
 <html>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>VEMS</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <meta name="theme-color" content="#1A1C21">
-<body style="margin: 0; padding: 0;">
-    <input type="number" id="spins-count" value="3">
-    <canvas id="webgl-canvas" style="height: 100vh; width: 100vw;"></canvas>
-</body>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>VEMS_2.0v</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#1A1C21" />
+  <link rel="stylesheet" href="styles/main.css" />
+  <body>
+    <header class="header">
+      <div class="header-logo">VEMS</div>
+      <div class="header-menu">MENU</div>
+    </header>
 
-<script type="text/javascript" src="pages/webglspins.min.js"></script>
-<script type="text/javascript" src="scripts/spins/init.js"></script>
+    <div class="main_block">
+      <div class="webgl">
+        <canvas class="webgl-canvas" id="webgl-canvas"></canvas>
+      </div>
+      <div class="menu">
+
+        <div class="swap">
+          <input
+            id="swap_check"
+            type="checkbox"
+            onclick="event_listener.switch('swap')"
+          />
+          <label for="swap_check">Поворот спина</label>
+        </div>
+
+        <div class="ruler">
+          <input
+            id="ruler_check"
+            type="checkbox"
+            onclick="event_listener.switch('ruler')"
+          />
+          <label for="ruler_check">Линейка</label>
+          <input
+            id="ruler-value"
+            value="0"
+            type="number"
+            title="Расстояние между спинами"
+            disabled
+          />
+        </div>
+
+        <div class="external">
+          <div class="__head"></div>
+          <div class="energy-option-str">
+                  <input id="external_check" name="external_check" type="checkbox" onclick="event_listener.switch('e_external')">
+                  <label for="external_check">External field</label>
+                  <input id='external_magnitude_value' value="1" type="number"  title="Внешнее поле" onchange=""/>
+          </div>
+
+          <div class="__head"></div>
+          <div class="energy-option-str">
+                  <span>Direction:</span>
+                  <input id='ext_direction_x'  value="1"  type="number" onchange=""/>
+                  <input id='ext_direction_y'  value="1"  type="number" onchange=""/>
+                  <input id='ext_direction_z'  value="1"  type="number" onchange=""/>
+          </div>
+        </div>
+
+        
+        <div class="anisotropy">
+          <div class="__head"></div>
+          <div class="energy-option-str">
+                  <input id="anisotropy_check" name="external_check" type="checkbox" onclick="event_listener.switch('anisotropy')">
+                  <label for="anisotropy_check">Анизотропия</label>
+                  <input id='anisotropy_magnitude_value' value="1" type="number"  title="Внешнее поле" onchange=""/>
+          </div>
+
+          <div class="__head"></div>
+          <div class="energy-option-str">
+                  <span>anisotropy_direction:</span>
+                  <input id='ansp_direction_x'  value="1"  type="number" onchange=""/>
+                  <input id='ansp_direction_y'  value="1"  type="number" onchange=""/>
+                  <input id='ansp_direction_z'  value="1"  type="number" onchange=""/>
+          </div>
+        </div>
+
+        <div class="__head"></div>
+        <div class="energy-option-str">
+        <input id="exchange_check"  type="checkbox" onclick="event_listener.switch('exchange')">
+            <label for="exchange_check">Exchange</label>
+        <input id='exchange_value' value="1" type="number"  title="Обменное взаимодействие" onchange=""/>
+        </div>
+
+        <div class="__head"></div>
+        <div class="energy-option-str">
+                <input id="dipol_check" name="dipol_check" type="checkbox" onclick="event_listener.switch('dipol_dipol')">
+                <label for="dipol_check">Dipol-dipol</label>
+                <input id='dipol_radius' value="1" type="number"  title="Диполь-дипольное взаимодействие" onchange="" disabled/>
+        </div>
+
+        <div class="__head"></div>
+        <div class="display-layer-str">
+                <input id="display_layer" name="display_layer" type="checkbox" onclick="event_listener.switch('display_layer')">
+                <label for="dipol_check">Display</label>
+                <input id='display_layer' value="0" type="number"  title="Диполь-дипольное взаимодействие" onchange=""/>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="display-result">
+      <input id="display-energy" name="energy" maxlength="25" value="E: " disabled/>
+      <input id="display-magnetization" name="magnetization" maxlength="25" value="M: " disabled/>
+    </div>
+  </body>
+
+  <script type="text/javascript" src="pages/webglspins.min.js"></script>
+  <script type="text/javascript" src="scripts/calculate.js"></script>
+  <script type="text/javascript" src="scripts/spin.js"></script>
+  <script type="text/javascript" src="scripts/grid.js"></script>
+  <script type="text/javascript" src="scripts/event_listener.js"></script>
+  <script type="text/javascript" src="scripts/init.js"></script>
 
 </html>
