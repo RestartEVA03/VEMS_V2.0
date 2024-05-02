@@ -94,12 +94,24 @@
 
         <div class="__head"></div>
         <div class="display-layer-str">
+              <div>
                 <input id="display_layer" name="display_layer" type="checkbox" onclick="event_listener.switch('display_layer')">
                 <label for="dipol_check">Display</label>
-                <input id='display_layer' value="0" type="number"  title="Диполь-дипольное взаимодействие" onchange=""/>
+              </div>
+                <label for="dipol_check">X:</label>
+                <input id='display_layer_x_min' value="0" type="number"  title="" onchange=""/>
+                <input id='display_layer_x_max' value="0" type="number"  title="" onchange=""/>
+                <label for="dipol_check">Y:</label>
+                <input id='display_layer_y_min' value="0" type="number"  title="" onchange=""/>
+                <input id='display_layer_y_max' value="0" type="number"  title="" onchange=""/>
+                <label for="dipol_check">Z:</label>
+                <input id='display_layer_z_min' value="0" type="number"  title="" onchange=""/>
+                <input id='display_layer_z_max' value="0" type="number"  title="" onchange=""/>
         </div>
+        <input type="file" id="file-selector" onchange="RWMfsys.load_grid(this)" accept=".mfsys">
 
       </div>
+
     </div>
 
     <div class="display-result">
@@ -109,10 +121,12 @@
   </body>
 
   <script type="text/javascript" src="pages/webglspins.min.js"></script>
+  <script type="text/javascript" src="scripts/tools.js"></script>
   <script type="text/javascript" src="scripts/calculate.js"></script>
   <script type="text/javascript" src="scripts/spin.js"></script>
   <script type="text/javascript" src="scripts/grid.js"></script>
   <script type="text/javascript" src="scripts/event_listener.js"></script>
+  <script type="text/javascript" src="scripts/rw_mfsys.js"></script>
   <script type="text/javascript" src="scripts/init.js"></script>
 
 </html>

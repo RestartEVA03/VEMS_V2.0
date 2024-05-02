@@ -58,6 +58,6 @@ function dipol_dipol(spins, d) {
             energy += (vector_mult(spins[i], spins[j]) / Math.pow(r, 3) - 3 * ((vector_mult(spins[i], r_vect) * vector_mult(spins[j], r_vect)) / Math.pow(r, 5)));
         }
     }
-    console.log(energy);
+    // console.log(energy);
     return d * energy
 }

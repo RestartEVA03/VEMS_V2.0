@@ -61,3 +61,8 @@ body {
     left: 3%;
     bottom: 5%;
 }
+
+.display-layer-str{
+    display: flex;
+    flex-direction: column;
+}

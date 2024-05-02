@@ -5,6 +5,10 @@ class Grid{
 
     static default_distance_between_spins = 2;
 
+    min_spin_radius = Infinity;
+    spins_count = 0;
+    spins = [];
+
     magnetization = 0;
     energy = {
         "dipol_dipol": 0, 
@@ -13,19 +17,48 @@ class Grid{
         "exchange": 0
     };
 
-    constructor(spins, spin_radius = Grid.default_distance_between_spins){
-        if (spins[0] instanceof Spin && spins.length != 0){
+    mu_coef = 1;
+    cameraLocation = []
+
+    constructor(spins, normalize = 0){
+        if (spins[0] instanceof Spin){
             this.spins_count = spins.length;
             this.spins = spins;
+            this.#init_min_spin_radius();
+            if (normalize == 1) {
+                this.#normalize();
+                console.log(this.spins);
+            }
+            this.#config();
             this.#init_camera_pos();
-            this.spin_radius = spin_radius;
         } else {
             throw new Error("Grid must be an array of Spins");
         }
     }
 
+    get spins_pos(){
+        return Array.prototype.concat(...this.spins.map(spin => spin.pos_array))
+    }
+
+    get spins_dir(){
+        return Array.prototype.concat(...this.spins.map(spin => spin.dir_array))
+    }
+
+    #init_min_spin_radius(){
+        for (var spin of this.spins){
+            for (var spin_2 of this.spins){
+                var dist = distance_between_points(spin.pos_array, spin_2.pos_array);
+                if (dist <  this.min_spin_radius && spin != spin_2){
+                    this.min_spin_radius = dist;
+                }
+            }
+        }
+    }
+
     #init_camera_pos(){
         var weight = [...this.spins.map(spin => spin.weight)]
+
+        // console.log(this.spins);
 
         var max_pos = this.spins[weight.indexOf(Math.max(...weight))].pos_array,
             min_pos = this.spins[weight.indexOf(Math.min(...weight))].pos_array;
@@ -33,11 +66,41 @@ class Grid{
         var camera_x = (max_pos[0] + min_pos[0]) / 2,
             camera_y = (max_pos[1] + min_pos[1]) / 2;
 
-        console.log("Initial CAMETA_POSITION:", camera_x, camera_y, 0);
+        this.cameraLocation = [camera_x, camera_y, Math.sqrt(this.spins_count) * 2];
+    }
 
-        webglspins.updateOptions({cameraLocation: [camera_x, camera_y, Math.sqrt(this.spins_count) * Grid.default_distance_between_spins],
-                                  centerLocation: [ camera_x,  camera_y, 0]});
+    #config(){
+        if (this.spins == undefined) {
+            throw new Error("Spins undefined");
+        } 
 
+        for (var spin of this.spins){
+            for (var spin_2 of this.spins){
+                var dist = distance_between_points(spin.pos_array, spin_2.pos_array);
+                if (dist <= this.min_spin_radius && spin != spin_2){
+                    spin.neighbors.push(spin_2);
+                }
+            }
+        }
+
+    }
+
+    #normalize(){
+        let min_spin_lenght = Math.min(...this.spins.map(spin => spin.length))
+        console.log("min_spin_lenght: ",min_spin_lenght);
+        console.log("this.min_spin_radius: ",this.min_spin_radius);
+        for (var spin of this.spins){
+            spin.pos.x = spin.pos.x / min_spin_lenght  * this.mu_coef;
+            spin.pos.y = spin.pos.y / min_spin_lenght  * this.mu_coef;
+            spin.pos.z = spin.pos.z / min_spin_lenght  * this.mu_coef;
+            spin.dir.x = spin.dir.x / this.min_spin_radius * this.mu_coef;
+            spin.dir.y = spin.dir.y / this.min_spin_radius * this.mu_coef;
+            spin.dir.z = spin.dir.z / this.min_spin_radius * this.mu_coef;
+        }
+    }
+
+    set_mu_coef(mu_coef){
+        this.mu_coef = mu_coef;
     }
 
     static create_izing(grid_size){
@@ -80,28 +143,5 @@ class Grid{
         } else {
             throw new Error("Grid size must be a number");
         }
-    }
-
-    init_spins_neighbors(){
-        if (this.spins == undefined) {
-            throw new Error("Spins undefined");
-        } 
-
-        for (var spin of this.spins){
-            for (var spin_2 of this.spins){
-                var dist = distance_between_points(spin.pos_array, spin_2.pos_array);
-                if (dist <= this.spin_radius && spin != spin_2){
-                    spin.neighbors.push(spin_2);
-                }
-            }
-        }
-    }
-
-    get spins_pos(){
-        return Array.prototype.concat(...this.spins.map(spin => spin.pos_array))
-    }
-
-    get spins_dir(){
-        return Array.prototype.concat(...this.spins.map(spin => spin.dir_array))
     }
 }

@@ -2,12 +2,9 @@ class VEMSListener {
 
     grid = null
     display_grid = null
-    ruler = {
-        "cnt": 0,
-        "spin_id": null
-    }
 
-    //TODO: разделить на уровни
+    mu_coef = 0.6
+
     default_action = {
         "ruler": false,
         "swap": false,
@@ -19,21 +16,36 @@ class VEMSListener {
         "display_layer": false,
     }
 
+    ruler = {
+        "cnt": 0,
+        "spin_id": null
+    }
+
     constructor() {
-        this.grid = Grid.create_izing(10)
-        this.grid.init_spins_neighbors();
-        this.display_grid = this.grid;
-        this.update()
+        this.grid = Grid.create_izing(9);
+        this.display_grid = new Grid(this.grid.spins.map(function(name) {
+            return name.deepCopySpin();
+          }));
+        this.update(1)
     }
 
-    set_grid(grid) {
-        this.grid = grid;
-        this.display_grid = this.grid;
-        this.update()
+    set_grid(new_grid) {
+        console.log("Just grid:", new_grid);
+        this.grid = new_grid;
+        
+        this.display_grid = new Grid(new_grid.spins.map(function(name) {
+            return name.deepCopySpin();
+          }), 1);
+        console.log("Display grid:",this.display_grid);
+        this.update(1)
     }
 
-    update() {
+    update(camera = 0) {
         webglspins.updateSpins(this.display_grid.spins_pos, this.display_grid.spins_dir);
+        if (camera == 1){
+            webglspins.updateOptions({cameraLocation: this.display_grid.cameraLocation,
+                centerLocation: [this.display_grid.cameraLocation[0],  this.display_grid.cameraLocation[1], 0]});
+        }
     }
 
     //TODO: добавить логику по обнулению подсчёта энергии 
@@ -49,8 +61,9 @@ class VEMSListener {
     action(event, args) {
         if (Object.keys(this.default_action)) {
             if (this.default_action.swap) {
-                    this.grid.spins[args].swap_dir();
-                    this.display_grid = this.grid;
+                    this.display_grid.spins[args].swap_dir();
+                    let target_uuid = this.display_grid.spins[args].uuid
+                    this.grid.spins[[...this.grid.spins.map(spin => spin.uuid)].indexOf(target_uuid)].swap_dir();
                     this.update();
                 }
             if (this.default_action.ruler){
@@ -95,7 +108,7 @@ class VEMSListener {
             this.grid.magnetization = magnetization(this.grid.spins);
 
             document.getElementById('display-magnetization').value = "M: " + Math.abs(this.grid.magnetization).toExponential(5);
-            console.log(this.grid.energy);
+            // console.log(this.grid.energy);
             document.getElementById('display-energy').value = "E: " + Object.values(this.grid.energy).reduce((a,b) => a+b,0).toExponential(5);
         }
     }
