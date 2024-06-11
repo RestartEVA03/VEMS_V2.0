@@ -23,7 +23,7 @@ class RWMfsys {
 
     static read_mfsys() {
         return new Promise((resolve, reject) => {
-            let input = document.getElementById('file-selector');
+            let input = document.getElementById('file-spins');
             if (!input.files.length) {
                 reject(new Error("No file selected"));
                 return;
