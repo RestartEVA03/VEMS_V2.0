@@ -116,7 +116,7 @@
                         <div class="__head"></div>
                         <div class="energy-option-str">
                             <span>mu_сoef</span>
-                            <input id='mu_coef' maxlength="25" min = "0.1" value="1" type="number" title="Коэффициент размера спина" step="0.1" />
+                            <input id='mu_coef' maxlength="25" min = "0.1" value="1" type="number" title="Коэффициент размера спина" step="0.1" onchange="event_listener.set_grid(new Grid(event_listener.grid.spins, 0, true))"/>
                         </div>
 
                         <div class="__head"></div>

@@ -18,7 +18,8 @@ class Grid{
     mu_coef = 1;
     cameraLocation = []
 
-    constructor(spins, normalize = 0){
+    constructor(spins, normalize = 0, mu_coef = false){
+        this.mu_coef = Number(document.getElementById('mu_coef').value)
         if (spins[0] instanceof Spin){
             this.spins_count = spins.length;
             this.spins = spins;

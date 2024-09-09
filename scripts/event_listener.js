@@ -4,8 +4,6 @@ class VEMSListener {
     displayed_grid = null
     displayed_grid_origin = null
 
-    mu_coef = 1
-
     default_action = {
         "ruler": false,
         "swap": false,
